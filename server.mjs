@@ -2,6 +2,7 @@
 
 // Import necessary packages and setup the server
 import express from 'express';
+const PORT = process.env.PORT || 5000
 const app = express();
 import { createServer } from 'http';
 const server = createServer(app);
@@ -104,8 +105,7 @@ io.on("connection", (socket) => {
 })
 
 // Broadcast the server
-server.listen(3000, () => {
-    console.log("Server hosted at http://localhost:3000");
+server.listen(PORT, () => {
 });
 
 // Generate a unique id
