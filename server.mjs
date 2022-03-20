@@ -88,7 +88,7 @@ io.on("connection", (socket) => {
         // Otherwise notify all users and confirm the change
         else {
             update_history(id, new_name);
-            socket.emit('chat_history', message_history);
+            io.emit('chat_history', message_history);
             var response = {
                 sender_id: id,
                 old_name: old_name,
