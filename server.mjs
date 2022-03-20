@@ -67,6 +67,8 @@ io.on("connection", (socket) => {
     })
 
     // Handle a name change
+    // TODO Verify names to make sure they're at least 1 character and not too long
+    // TODO add rejection reason for name rejection
     socket.on('new_name', (message) => {
         var user_info = active_users[socket.id];
         var id = user_info.id;
