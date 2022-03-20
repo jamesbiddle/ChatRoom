@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>S4S Chat</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+<h1 id="header"></h1>
+
+<div id="chatbox-outer">
+    <div id="chatbox">  
+        
+    </div>
+</div>
+
+<div class="formbox">
+    <form action="" id="message_form">
+        <label for="input">Message:</label>
+        <input type="text" id="message-input">
+        <input type="submit" value="Send">
+    </form>
+</div>
+
+<div class="formbox">
+    <form id="name_form" action = "">
+        <label for="input">Display name:</label>
+        <input type="text" id="name-input">
+        <input type="submit" value="Submit">
+    </form>
+</div>
+
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script src="client.mjs" type="module"></script>
+</html>
