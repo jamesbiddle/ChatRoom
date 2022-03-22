@@ -57,7 +57,8 @@ function receive_message(message) {
         var old_name = message.old_name;
         var new_name = message.new_name;
         var rejected = message.rejected;
-        var elem = display_namechange(old_name, new_name, rejected)
+        var reason = message.reason;
+        var elem = display_namechange(old_name, new_name, rejected, reason)
     }
     else {
         var sender_id = message.sender_id;
@@ -113,12 +114,12 @@ function display_message(name, message, type, self = false) {
 }
 
 // Display name changes in the chat box
-function display_namechange(old_name, new_name, rejected = false) {
+function display_namechange(old_name, new_name, rejected = false, reason) {
     var chatbox = document.getElementById('chatbox');
     var message_box = document.createElement('div');
     message_box.className = 'message-box';
     if (rejected) {
-        var message = `Name "${new_name}" is already taken`;
+        var message = reason;
     }
     else {
         var message = `${old_name} changed their name to ${new_name}`;

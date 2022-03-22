@@ -14,21 +14,15 @@
       <div id="chatbox"></div>
     </div>
 
-    <div class="formbox">
-      <form action="" id="message_form">
-        <label for="input">Message:</label>
-        <input type="text" id="message-input" />
-        <input type="submit" value="Send" />
-      </form>
-    </div>
+    <form action="" id="message_form" class="formbox">
+      <input type="text" id="message-input" placeholder="Your message.." />
+      <input type="submit" value="Send" class="inputbutton" />
+    </form>
 
-    <div class="formbox">
-      <form id="name_form" action="">
-        <label for="input">Display name:</label>
-        <input type="text" id="name-input" />
-        <input type="submit" value="Submit" />
-      </form>
-    </div>
+    <form id="name_form" action="" class="formbox">
+      <input type="text" id="name-input" placeholder="New display name.." />
+      <input type="submit" value="Submit" class="inputbutton" />
+    </form>
   </body>
   <script src="/socket.io/socket.io.js"></script>
   <script src="client.mjs" type="module"></script>

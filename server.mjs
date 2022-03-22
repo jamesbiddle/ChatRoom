@@ -77,13 +77,28 @@ io.on("connection", (socket) => {
 
         // Check if name is already in use
         var unique = check_unique_name(new_name);
+
+        var validity = check_valid_name(new_name);
+        var valid = validity.valid;
+
         // If it is, only notify the proposer of the rejection
         if (!unique) {
             var response = {
                 old_name: old_name,
                 new_name: new_name,
                 rejected: true,
-                type: 'namechange'
+                type: 'namechange',
+                reason: `Name "${new_name}" is not unique`
+            };
+            socket.emit('incoming_message', response);
+        }
+        else if (!valid) {
+            var response = {
+                old_name: old_name,
+                new_name: new_name,
+                rejected: true,
+                type: 'namechange',
+                reason: validity.reason
             };
             socket.emit('incoming_message', response);
         }
@@ -142,6 +157,13 @@ function check_unique_name(name) {
         if (active_users[key].display_name === name) return false;
     }
     return true;
+}
+
+function check_valid_name(name) {
+    var max_name_length = 15;
+    if (name.length < 1) return { valid: false, reason: "Name must not be empty" }
+    if (name.length > max_name_length) return { valid: false, reason: `Name must be less than ${max_name_length} characters` }
+    return { valid: true }
 }
 
 function random_string(length) {
