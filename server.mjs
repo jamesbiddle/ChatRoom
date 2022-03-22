@@ -67,8 +67,6 @@ io.on("connection", (socket) => {
     })
 
     // Handle a name change
-    // TODO Verify names to make sure they're at least 1 character and not too long
-    // TODO add rejection reason for name rejection
     socket.on('new_name', (message) => {
         var user_info = active_users[socket.id];
         var id = user_info.id;
@@ -135,6 +133,7 @@ function unique_id() {
     return id;
 }
 
+// Check that a given id is not in use
 function check_unique_id(id) {
     for (const key in active_users) {
         if (active_users[key].id === id) return false;
@@ -152,6 +151,7 @@ function unique_name() {
     return name;
 }
 
+// Check that the display name is not in use
 function check_unique_name(name) {
     for (const key in active_users) {
         if (active_users[key].display_name === name) return false;
@@ -159,6 +159,7 @@ function check_unique_name(name) {
     return true;
 }
 
+// Check validity of a proposed display name
 function check_valid_name(name) {
     var max_name_length = 15;
     if (name.length < 1) return { valid: false, reason: "Name must not be empty" }
@@ -166,6 +167,7 @@ function check_valid_name(name) {
     return { valid: true }
 }
 
+// Make a random string of specified length
 function random_string(length) {
     var result = '';
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -177,6 +179,7 @@ function random_string(length) {
     return result;
 }
 
+// Add a message to the message history
 function add_history(message) {
     message_history.push(message)
     if (message_history.length > max_messages) {
@@ -184,6 +187,7 @@ function add_history(message) {
     }
 }
 
+// Retroactively modify the chat history to reflect the latest display name
 function update_history(id, new_name) {
     for (const message of message_history) {
         if (message.sender_id === id && message.type == 'chatmessage') {

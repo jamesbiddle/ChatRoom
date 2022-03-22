@@ -1,3 +1,4 @@
+// Library imports
 const socket = io();
 
 // Global variables to use throughout the session
@@ -47,7 +48,7 @@ socket.on('update_name', (message) => {
 
 // Process and display incoming messages
 function receive_message(message) {
-    // Check if user was scrolled to the bottom of the chat
+    // Record if user was scrolled to the bottom of the chat
     var chatbox = document.getElementById('chatbox');
     var at_bottom = chatbox.offsetHeight + chatbox.scrollTop >= chatbox.scrollHeight
 
@@ -65,10 +66,10 @@ function receive_message(message) {
         var sender_name = message.sender_name;
         var text = message.text;
         if (sender_id === user_info.id) {
-            var elem = display_message(sender_name, text, type, true);
+            var elem = display_chatmessage(sender_name, text, type, true);
         }
         else {
-            var elem = display_message(sender_name, text, type);
+            var elem = display_chatmessage(sender_name, text, type);
         }
     }
 
@@ -79,7 +80,7 @@ function receive_message(message) {
 }
 
 // Display messages in the chat box
-function display_message(name, message, type, self = false) {
+function display_chatmessage(name, message, type, self = false) {
     var chatbox = document.getElementById('chatbox');
     var message_box = document.createElement('div');
     message_box.className = 'message-box';
@@ -139,7 +140,8 @@ function update_name(new_name) {
     sessionStorage.setItem('display_name', new_name);
     // Change document header to reflect name change
     var header = document.getElementById('header');
-    header.textContent = `Welcome to the S4S chatroom, ${new_name}`;
+    var span = document.getElementById('display-name');
+    header.innerHTML = `Welcome to the S4S chatroom, <span id="display-name">${new_name}</span>`;
 }
 
 // Add event listeners for the message box form

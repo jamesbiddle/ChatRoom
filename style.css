@@ -15,6 +15,10 @@ html {
   min-width: 400px;
 }
 
+#display-name {
+  color: #ff79c6;
+}
+
 #chatbox-outer {
   height: 70%;
   min-height: 200px;
