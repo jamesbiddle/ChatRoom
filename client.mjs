@@ -14,7 +14,7 @@ socket.on('connect', () => {
         user_info = new_info;
         sessionStorage.setItem('id', user_info.id);
         //sessionStorage.setItem('display_name', user_info.display_name);
-        update_name(user_info.display_name)
+        update_name(user_info.display_name);
         // Send a user connected message
         var message = {
             sender_id: user_info.id,
@@ -140,8 +140,9 @@ function update_name(new_name) {
     sessionStorage.setItem('display_name', new_name);
     // Change document header to reflect name change
     var header = document.getElementById('header');
+    header.innerHTML = `Welcome to the S4S chatroom, <span id="display-name"></span>`;
     var span = document.getElementById('display-name');
-    header.innerHTML = `Welcome to the S4S chatroom, <span id="display-name">${new_name}</span>`;
+    span.textContent= new_name;
 }
 
 // Add event listeners for the message box form

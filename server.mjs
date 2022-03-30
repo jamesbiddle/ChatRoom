@@ -2,7 +2,7 @@
 
 // Import necessary packages and setup the server
 import express from 'express';
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5000;
 const app = express();
 import { createServer } from 'http';
 const server = createServer(app);
@@ -31,7 +31,7 @@ var active_users = {};
 // Establish the socket connection
 io.on("connection", (socket) => {
 
-    // Register a new user with the server 
+    // Register a new user with the server
     // This event is fired on user connection
     socket.on('register', (clientUuid, display_name, callback) => {
         // If no id is present, make a new unique id
@@ -43,9 +43,9 @@ io.on("connection", (socket) => {
             'display_name': name
         };
         active_users[socket.id] = info;
-        socket.emit('chat_history', message_history)
-        callback(info)
-    })
+        socket.emit('chat_history', message_history);
+        callback(info);
+    });
 
     // Notify a disconnection and remove the user from the active users object
     socket.on('disconnect', () => {
@@ -54,17 +54,17 @@ io.on("connection", (socket) => {
             sender_id: user_info.id,
             sender_name: user_info.display_name,
             type: 'disconnected'
-        }
+        };
         delete active_users[socket.id];
         add_history(message);
-        io.emit('incoming_message', message)
-    })
+        io.emit('incoming_message', message);
+    });
 
     // On a new message, append it to the chat history and broadcast to all users
     socket.on('message', (message) => {
         add_history(message);
-        io.emit('incoming_message', message)
-    })
+        io.emit('incoming_message', message);
+    });
 
     // Handle a name change
     socket.on('new_name', (message) => {
@@ -91,7 +91,7 @@ io.on("connection", (socket) => {
             socket.emit('incoming_message', response);
         }
         else if (!valid) {
-            var response = {
+            response = {
                 old_name: old_name,
                 new_name: new_name,
                 rejected: true,
@@ -104,20 +104,20 @@ io.on("connection", (socket) => {
         else {
             update_history(id, new_name);
             io.emit('chat_history', message_history);
-            var response = {
+            response = {
                 sender_id: id,
                 old_name: old_name,
                 new_name: new_name,
                 rejected: false,
                 type: 'namechange'
-            }
+            };
             add_history(response);
             socket.emit('update_name', response);
             io.emit('incoming_message', response);
             user_info.display_name = new_name;
         }
-    })
-})
+    });
+});
 
 // Broadcast the server
 server.listen(PORT, () => {
@@ -162,9 +162,10 @@ function check_unique_name(name) {
 // Check validity of a proposed display name
 function check_valid_name(name) {
     var max_name_length = 15;
-    if (name.length < 1) return { valid: false, reason: "Name must not be empty" }
-    if (name.length > max_name_length) return { valid: false, reason: `Name must be less than ${max_name_length} characters` }
-    return { valid: true }
+    if (name.length < 1) return { valid: false, reason: "Name must not be empty" };
+    if (name.length > max_name_length)
+	return { valid: false, reason: `Name must be less than ${max_name_length} characters` };
+    return { valid: true };
 }
 
 // Make a random string of specified length
@@ -181,9 +182,9 @@ function random_string(length) {
 
 // Add a message to the message history
 function add_history(message) {
-    message_history.push(message)
+    message_history.push(message);
     if (message_history.length > max_messages) {
-        message_history.shift()
+        message_history.shift();
     }
 }
 
