@@ -2,13 +2,13 @@
 const socket = io();
 
 // Global variables to use throughout the session
-var user_info = {}
+var user_info = {};
 user_info.id = sessionStorage.getItem('id');
 user_info.display_name = sessionStorage.getItem('display_name');
 
 // This code will run as soon as a connection is established
 socket.on('connect', () => {
-    // Register the new connection 
+    // Register the new connection
     // use a previously stored id and display name if present
     socket.emit('register', user_info.id, user_info.display_name, (new_info) => {
         user_info = new_info;
@@ -20,15 +20,15 @@ socket.on('connect', () => {
             sender_id: user_info.id,
             sender_name: user_info.display_name,
             type: 'connected'
-        }
-        socket.emit('message', message)
-    })
-})
+        };
+        socket.emit('message', message);
+    });
+});
 
 // Handle incoming messages
 socket.on('incoming_message', (message) => {
-    receive_message(message)
-})
+    receive_message(message);
+});
 
 // Receive a chat history stored as a list of messages
 socket.on('chat_history', (history) => {
@@ -36,21 +36,21 @@ socket.on('chat_history', (history) => {
     var chatbox = document.getElementById('chatbox');
     chatbox.innerHTML = "";
     for (const message of history) {
-        receive_message(message)
+        receive_message(message);
     }
-})
+});
 
 // Handle a new name
 socket.on('update_name', (message) => {
     var new_name = message.new_name;
-    update_name(new_name)
-})
+    update_name(new_name);
+});
 
 // Process and display incoming messages
 function receive_message(message) {
     // Record if user was scrolled to the bottom of the chat
     var chatbox = document.getElementById('chatbox');
-    var at_bottom = chatbox.offsetHeight + chatbox.scrollTop >= chatbox.scrollHeight
+    var at_bottom = chatbox.offsetHeight + chatbox.scrollTop >= chatbox.scrollHeight;
 
     // Add new message to chatbox
     var type = message.type;
@@ -59,17 +59,17 @@ function receive_message(message) {
         var new_name = message.new_name;
         var rejected = message.rejected;
         var reason = message.reason;
-        var elem = display_namechange(old_name, new_name, rejected, reason)
+        var elem = display_namechange(old_name, new_name, rejected, reason);
     }
     else {
         var sender_id = message.sender_id;
         var sender_name = message.sender_name;
         var text = message.text;
         if (sender_id === user_info.id) {
-            var elem = display_chatmessage(sender_name, text, type, true);
+            elem = display_chatmessage(sender_name, text, type, true);
         }
         else {
-            var elem = display_chatmessage(sender_name, text, type);
+            elem = display_chatmessage(sender_name, text, type);
         }
     }
 
@@ -95,10 +95,10 @@ function display_chatmessage(name, message, type, self = false) {
         if (name) {
             var name_div = document.createElement('div');
             if (self) {
-                name_div.className = 'your-name'
+                name_div.className = 'your-name';
             }
             else {
-                name_div.className = 'other-name'
+                name_div.className = 'other-name';
             };
             name_div.textContent = name;
             message_box.appendChild(name_div);
@@ -123,7 +123,7 @@ function display_namechange(old_name, new_name, rejected = false, reason) {
         var message = reason;
     }
     else {
-        var message = `${old_name} changed their name to ${new_name}`;
+        message = `${old_name} changed their name to ${new_name}`;
     }
     var message_div = document.createElement('div');
     message_div.className = 'message';
@@ -145,7 +145,7 @@ function update_name(new_name) {
 }
 
 // Add event listeners for the message box form
-var send_form = document.getElementById("message_form")
+var send_form = document.getElementById("message_form");
 send_form.addEventListener('submit', (e) => {
     var message_text = send_form.elements["message-input"].value;
     var message = {
@@ -153,23 +153,23 @@ send_form.addEventListener('submit', (e) => {
         sender_name: user_info.display_name,
         text: message_text,
         type: 'chatmessage'
-    }
-    socket.emit('message', message)
+    };
+    socket.emit('message', message);
     send_form.elements["message-input"].value = '';
     // Supresses form refresh
     e.preventDefault();
-})
+});
 
 // Add event listeners for the name change form
-var name_name = document.getElementById("name_form")
+var name_form = document.getElementById("name_form");
 name_form.addEventListener('submit', (e) => {
     var new_name = name_form.elements["name-input"].value;
     var message = {
         sender_id: user_info.id,
         new_name: new_name,
-    }
-    socket.emit('new_name', message)
+    };
+    socket.emit('new_name', message);
     name_form.elements["name-input"].value = '';
     // Supresses form refresh
     e.preventDefault();
-})
+});
